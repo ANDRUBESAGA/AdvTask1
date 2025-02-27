@@ -1,0 +1,63 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+  - main
+
+pool:
+  name: besaha-agent
+  demands:
+    - agent.name -equals Besaha-runner
+
+stages:
+  - stage: Build
+    jobs:
+      - job: Build_Job
+        pool:
+          name: besaha-agent  # Use the same self-hosted agent pool
+          demands:
+            - agent.name -equals Besaha-runner
+        steps:
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '16.x'
+          displayName: 'Install Node.js'
+
+        - script: npm install
+          displayName: 'Restore dependencies'
+
+        - script: npm run build
+          displayName: 'Build application'
+
+        - script: npm test
+          displayName: 'Run tests'
+
+        - task: PublishPipelineArtifact@1
+          inputs:
+            targetPath: '$(System.DefaultWorkingDirectory)'
+            artifact: 'drop'
+            publishLocation: 'pipeline'
+
+  - stage: Deploy
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - job: Deploy_Job
+        pool:
+          name: besaha-agent  # Use the same self-hosted agent pool
+          demands:
+            - agent.name -equals Besaha-runner
+        steps:
+        - task: DownloadPipelineArtifact@2
+          inputs:
+            artifact: 'drop'
+            path: '$(Pipeline.Workspace)/drop'
+
+        - task: AzureWebApp@1
+          inputs:
+            azureSubscription: 'Besaha-sc'
+            appType: 'webApp'
+            appName: 'Besaha-WebApp'
+            package: '$(Pipeline.Workspace)/drop'
