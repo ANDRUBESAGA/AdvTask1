@@ -35,6 +35,7 @@ stages:
             scannerMode: 'cli'
             configMode: 'manual'
             cliProjectKey: 'ANDRUBESAGA_AdvTask1'
+            projectName: AdvTask1
             cliSources: '.'
             extraProperties: |
               sonar.branch.name=main
