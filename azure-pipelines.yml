@@ -36,6 +36,9 @@ stages:
             configMode: 'manual'
             cliProjectKey: 'ANDRUBESAGA_AdvTask1'
             cliSources: '.'
+            extraProperties: |
+              sonar.branch.name=main
+
         - task: SonarCloudPublish@3
           inputs:
             pollingTimeoutSec: '300'
