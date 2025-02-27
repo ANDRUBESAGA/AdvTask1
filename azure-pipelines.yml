@@ -28,6 +28,16 @@ stages:
         - script: npm install
           displayName: 'Restore dependencies'
 
+        - task: SonarQubePrepare@4
+          inputs:
+            SonarQube: 'SonarQube'  # Service connection name in Azure DevOps
+            organization: 'Andrii Besaha'  # Replace with your SonarCloud org
+            projectKey: 'ANDRUBESAGA_AdvTask1'       # Replace with your SonarCloud project key
+            projectName: 'Fabrikam Bank API'
+            extraProperties: |
+              sonar.sources=.
+              sonar.exclusions=**/node_modules/**, **/coverage/**
+
         - script: npm run build
           displayName: 'Build application'
 
@@ -57,7 +67,7 @@ stages:
 
         - task: AzureWebApp@1
           inputs:
-            azureSubscription: 'Besaha-sc'
+            azureSubscription: 'besahasc'
             appType: 'webApp'
             appName: 'Besaha-WebApp'
             package: '$(Pipeline.Workspace)/drop'
