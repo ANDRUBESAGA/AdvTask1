@@ -28,15 +28,20 @@ stages:
         - script: npm install
           displayName: 'Restore dependencies'
 
-        - task: SonarQubePrepare@4
+        - task: SonarCloudPrepare@3
           inputs:
-            SonarQube: 'SonarQube'  # Service connection name in Azure DevOps
-            organization: 'Andrii Besaha'  # Replace with your SonarCloud org
-            projectKey: 'ANDRUBESAGA_AdvTask1'       # Replace with your SonarCloud project key
-            projectName: 'Fabrikam Bank API'
-            extraProperties: |
-              sonar.sources=.
-              sonar.exclusions=**/node_modules/**, **/coverage/**
+            SonarQube: 'SonarQubeCloud'
+            organization: 'andrubesaga'
+            scannerMode: 'cli'
+            configMode: 'manual'
+            cliProjectKey: 'ANDRUBESAGA_AdvTask1'
+            cliSources: '.'
+        - task: SonarCloudAnalyze@3
+          inputs:
+            jdkversion: 'JAVA_HOME_17_X64'
+        - task: SonarCloudPublish@3
+          inputs:
+            pollingTimeoutSec: '300'
 
         - script: npm run build
           displayName: 'Build application'
