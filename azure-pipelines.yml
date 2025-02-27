@@ -69,5 +69,5 @@ stages:
           inputs:
             azureSubscription: 'besahasc'
             appType: 'webApp'
-            appName: 'Besaha-WebApp'
+            appName: 'besaha-webapp'
             package: '$(Pipeline.Workspace)/drop'
