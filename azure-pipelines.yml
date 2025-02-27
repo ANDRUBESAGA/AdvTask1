@@ -38,7 +38,7 @@ stages:
             cliSources: '.'
         - task: SonarCloudAnalyze@3
           inputs:
-            jdkversion: 'JAVA_HOME_17_X64'
+            jdkversion: 'JAVA_HOME'
         - task: SonarCloudPublish@3
           inputs:
             pollingTimeoutSec: '300'
